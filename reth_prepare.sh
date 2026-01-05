@@ -12,7 +12,7 @@ set -eu
 if [[ $# -lt 1 ]]; then
     echo "Usage: $0 <target_directory>" >&2
     echo "Example: $0 /path/to/target" >&2
-    exit 1
+    return 1 2>/dev/null || exit 1
 fi
 
 # Get script directory (project directory)
@@ -23,7 +23,7 @@ TARGET_DIR="$1"
 # Validate target directory
 if [[ ! -d "$TARGET_DIR" ]]; then
     echo "Error: Target directory '$TARGET_DIR' does not exist" >&2
-    exit 1
+    return 1 2>/dev/null || exit 1
 fi
 
 # Get absolute paths
@@ -37,7 +37,7 @@ echo "Target directory (where binaries will be placed): $TARGET_DIR"
 VERSIONS_ENV="$PROJECT_DIR/versions.env"
 if [[ ! -f "$VERSIONS_ENV" ]]; then
     echo "Error: versions.env not found at $VERSIONS_ENV" >&2
-    exit 1
+    return 1 2>/dev/null || exit 1
 fi
 
 echo "Loading versions.env from $VERSIONS_ENV..."
@@ -59,12 +59,12 @@ fi
 # Check required environment variables from versions.env
 if [[ -z "${OP_NODE_REPO:-}" ]] || [[ -z "${OP_NODE_TAG:-}" ]] || [[ -z "${OP_NODE_COMMIT:-}" ]]; then
     echo "Error: OP_NODE_REPO, OP_NODE_TAG, or OP_NODE_COMMIT not set in versions.env" >&2
-    exit 1
+    return 1 2>/dev/null || exit 1
 fi
 
 if [[ -z "${BASE_RETH_NODE_REPO:-}" ]] || [[ -z "${BASE_RETH_NODE_TAG:-}" ]] || [[ -z "${BASE_RETH_NODE_COMMIT:-}" ]]; then
     echo "Error: BASE_RETH_NODE_REPO, BASE_RETH_NODE_TAG, or BASE_RETH_NODE_COMMIT not set in versions.env" >&2
-    exit 1
+    return 1 2>/dev/null || exit 1
 fi
 
 # Function to check if a command exists
@@ -79,13 +79,13 @@ build_op_node() {
     # Check for Go
     if ! command_exists go; then
         echo "Error: Go is not installed. Please install Go 1.24 or later." >&2
-        exit 1
+        return 1
     fi
     
     # Check for make
     if ! command_exists make; then
         echo "Error: make is not installed. Please install make." >&2
-        exit 1
+        return 1
     fi
     
     # Install just if not available
@@ -110,7 +110,7 @@ build_op_node() {
     ACTUAL_COMMIT=$(git rev-parse HEAD)
     if [[ "$ACTUAL_COMMIT" != "$OP_NODE_COMMIT" ]]; then
         echo "Error: Commit hash mismatch. Expected $OP_NODE_COMMIT, got $ACTUAL_COMMIT" >&2
-        exit 1
+        return 1
     fi
     
     # Build op-node
@@ -125,7 +125,7 @@ build_op_node() {
         echo "op-node built successfully: $TARGET_DIR/op-node"
     else
         echo "Error: op-node binary not found after build" >&2
-        exit 1
+        return 1
     fi
     
     # Cleanup
@@ -140,7 +140,7 @@ build_reth() {
     # Check for Rust and cargo
     if ! command_exists cargo; then
         echo "Error: Rust/Cargo is not installed. Please install Rust 1.88 or later." >&2
-        exit 1
+        return 1
     fi
     
     # Create temporary build directory
@@ -158,7 +158,7 @@ build_reth() {
     ACTUAL_COMMIT=$(git rev-parse HEAD)
     if [[ "$ACTUAL_COMMIT" != "$BASE_RETH_NODE_COMMIT" ]]; then
         echo "Error: Commit hash mismatch. Expected $BASE_RETH_NODE_COMMIT, got $ACTUAL_COMMIT" >&2
-        exit 1
+        return 1
     fi
     
     # Build with maxperf profile
@@ -172,7 +172,7 @@ build_reth() {
         echo "base-reth-node built successfully: $TARGET_DIR/base-reth-node"
     else
         echo "Error: base-reth-node binary not found after build" >&2
-        exit 1
+        return 1
     fi
     
     # Cleanup
