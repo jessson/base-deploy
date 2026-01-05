@@ -42,7 +42,7 @@ exec "$BINARY" node \
   --full \
   --datadir="$RETH_DATA_DIR" \
   --log.file.directory="$RETH_LOG_DIR" \
-  --log.file.filename="reth.log" \
+  --log.file.name="reth.log" \
   --ws \
   --ws.origins="*" \
   --ws.addr=127.0.0.1 \
