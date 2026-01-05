@@ -16,7 +16,9 @@ if [[ $# -lt 1 ]]; then
 fi
 
 # Get script directory (project directory)
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Use BASH_SOURCE when script is sourced, $0 when executed directly
+SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_SOURCE")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR"
 TARGET_DIR="$1"
 
