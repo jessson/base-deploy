@@ -3,8 +3,8 @@
 # This script loads versions.env from the script directory, builds op-node and reth if needed,
 # and sets up reth runtime environment variables
 #
-# Usage: prepare_reth_env.sh <target_directory>
-# Example: prepare_reth_env.sh /path/to/target
+# Usage: source prepare_reth_env.sh <target_directory>
+# Example: source prepare_reth_env.sh /path/to/target
 
 set -eu
 
@@ -43,6 +43,18 @@ fi
 echo "Loading versions.env from $VERSIONS_ENV..."
 # shellcheck source=/dev/null
 . "$VERSIONS_ENV"
+
+# Load .env.mainnet from project directory
+ENV_MAINNET="$PROJECT_DIR/.env.mainnet"
+if [[ -f "$ENV_MAINNET" ]]; then
+    echo "Loading .env.mainnet from $ENV_MAINNET..."
+    # shellcheck source=/dev/null
+    set -a
+    . "$ENV_MAINNET"
+    set +a
+else
+    echo "Warning: .env.mainnet not found at $ENV_MAINNET" >&2
+fi
 
 # Check required environment variables from versions.env
 if [[ -z "${OP_NODE_REPO:-}" ]] || [[ -z "${OP_NODE_TAG:-}" ]] || [[ -z "${OP_NODE_COMMIT:-}" ]]; then
