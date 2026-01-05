@@ -6,7 +6,11 @@
 # Usage: source prepare_reth_env.sh <target_directory>
 # Example: source prepare_reth_env.sh /path/to/target
 
-set -eu
+# Note: When sourced, set -e will cause shell to exit on error
+# We handle errors with return instead of exit to avoid this
+# set -e is disabled when sourced to prevent shell exit
+set +e
+set +u
 
 # Check if target directory is provided
 if [[ $# -lt 1 ]]; then
@@ -318,3 +322,6 @@ echo ""
 echo "Or to run reth-entrypoint:"
 echo "  source $0 $TARGET_DIR"
 echo "  bash $TARGET_DIR/reth-entrypoint"
+
+# Explicit return to ensure script ends properly when sourced
+return 0 2>/dev/null || true
