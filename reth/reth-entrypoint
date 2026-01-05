@@ -1,16 +1,18 @@
 #!/bin/bash
 set -eu
 
-IPC_PATH="/data/reth.ipc"
-RETH_DATA_DIR=/data
-RPC_PORT="${RPC_PORT:-8545}"
-WS_PORT="${WS_PORT:-8546}"
-AUTHRPC_PORT="${AUTHRPC_PORT:-8551}"
+RETH_DIR=/home/luffy/nodes/base
+IPC_PATH=$RETH_DIR/data/reth.ipc
+RETH_DATA_DIR=$RETH_DIR/data
+RETH_LOG_DIR=$RETH_DIR/logs
+BINARY=$RETH_DIR/base-reth-node
+RPC_PORT="${RPC_PORT:-8645}"
+WS_PORT="${WS_PORT:-8646}"
+AUTHRPC_PORT="${AUTHRPC_PORT:-8552}"
 METRICS_PORT="${METRICS_PORT:-6060}"
 DISCOVERY_PORT="${DISCOVERY_PORT:-30303}"
-P2P_PORT="${P2P_PORT:-30303}"
+P2P_PORT="${P2P_PORT:-30304}"
 ADDITIONAL_ARGS=""
-BINARY="./base-reth-node"
 
 if [[ -z "${RETH_CHAIN:-}" ]]; then
     echo "expected RETH_CHAIN to be set" 1>&2
@@ -37,23 +39,24 @@ echo "$OP_NODE_L2_ENGINE_AUTH_RAW" > "$OP_NODE_L2_ENGINE_AUTH"
 
 exec "$BINARY" node \
   -vvv \
+  --full \
   --datadir="$RETH_DATA_DIR" \
-  --log.stdout.format json \
+  --log.file.directory="$RETH_LOG_DIR" \
+  --log.file.filename="reth.log" \
   --ws \
   --ws.origins="*" \
-  --ws.addr=0.0.0.0 \
+  --ws.addr=127.0.0.1 \
   --ws.port="$WS_PORT" \
   --ws.api=web3,debug,eth,net,txpool \
   --http \
   --http.corsdomain="*" \
-  --http.addr=0.0.0.0 \
+  --http.addr=127.0.0.1 \
   --http.port="$RPC_PORT" \
   --http.api=web3,debug,eth,net,txpool,miner \
   --ipcpath="$IPC_PATH" \
-  --authrpc.addr=0.0.0.0 \
+  --authrpc.addr=127.0.0.1 \
   --authrpc.port="$AUTHRPC_PORT" \
   --authrpc.jwtsecret="$OP_NODE_L2_ENGINE_AUTH" \
-  --metrics=0.0.0.0:"$METRICS_PORT" \
   --max-outbound-peers=100 \
   --chain "$RETH_CHAIN" \
   --rollup.sequencer-http="$RETH_SEQUENCER_HTTP" \
