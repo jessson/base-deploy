@@ -277,6 +277,26 @@ else
     echo "  ✓ RETH_SEQUENCER_HTTP=$RETH_SEQUENCER_HTTP"
 fi
 
+# Copy entrypoint scripts to target directory
+RETH_ENTRYPOINT_SRC="$PROJECT_DIR/reth/reth-entrypoint"
+OP_NODE_ENTRYPOINT_SRC="$PROJECT_DIR/op-node-entrypoint"
+
+if [[ -f "$RETH_ENTRYPOINT_SRC" ]]; then
+    cp "$RETH_ENTRYPOINT_SRC" "$TARGET_DIR/reth-entrypoint"
+    chmod +x "$TARGET_DIR/reth-entrypoint"
+    echo "Copied reth-entrypoint to $TARGET_DIR/reth-entrypoint"
+else
+    echo "Warning: reth-entrypoint not found at $RETH_ENTRYPOINT_SRC" >&2
+fi
+
+if [[ -f "$OP_NODE_ENTRYPOINT_SRC" ]]; then
+    cp "$OP_NODE_ENTRYPOINT_SRC" "$TARGET_DIR/op-node-entrypoint"
+    chmod +x "$TARGET_DIR/op-node-entrypoint"
+    echo "Copied op-node-entrypoint to $TARGET_DIR/op-node-entrypoint"
+else
+    echo "Warning: op-node-entrypoint not found at $OP_NODE_ENTRYPOINT_SRC" >&2
+fi
+
 echo ""
 echo "=========================================="
 echo "Build complete!"
@@ -286,9 +306,13 @@ echo "Binaries are available at:"
 echo "  - op-node: $OP_NODE_BINARY"
 echo "  - base-reth-node: $BINARY"
 echo ""
+echo "Entrypoint scripts are available at:"
+echo "  - reth-entrypoint: $TARGET_DIR/reth-entrypoint"
+echo "  - op-node-entrypoint: $TARGET_DIR/op-node-entrypoint"
+echo ""
 echo "To use these variables in your current shell, source this script:"
 echo "  source $0 $TARGET_DIR"
 echo ""
 echo "Or to run reth-entrypoint:"
 echo "  source $0 $TARGET_DIR"
-echo "  bash $PROJECT_DIR/reth/reth-entrypoint"
+echo "  bash $TARGET_DIR/reth-entrypoint"
