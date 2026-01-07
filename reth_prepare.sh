@@ -246,12 +246,8 @@ echo "  IPC_PATH=$IPC_PATH"
 echo "  RETH_LOG_FILE=$RETH_LOG_FILE"
 echo "  BINARY=$BINARY"
 echo "  OP_NODE_BINARY=$OP_NODE_BINARY"
-if [[ -n "$RETH_FB_WEBSOCKET_URL" ]]; then
-    echo "  RETH_FB_WEBSOCKET_URL=$RETH_FB_WEBSOCKET_URL"
-fi
-if [[ -n "$RETH_PRUNING_ARGS" ]]; then
-    echo "  RETH_PRUNING_ARGS=$RETH_PRUNING_ARGS"
-fi
+echo "  RETH_FB_WEBSOCKET_URL=$RETH_FB_WEBSOCKET_URL"
+echo "  RETH_CONFIG_FILE=$RETH_CONFIG_FILE"
 
 # Check for required variables (warnings only, not errors)
 echo ""
