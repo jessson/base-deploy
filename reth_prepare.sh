@@ -230,10 +230,6 @@ export OP_NODE_BINARY="$TARGET_DIR/op-node"
 # OP_NODE_L2_ENGINE_AUTH_RAW - must be set by user
 # RETH_SEQUENCER_HTTP - must be set by user
 
-# Optional variables
-export RETH_FB_WEBSOCKET_URL="${RETH_FB_WEBSOCKET_URL:-}"
-export RETH_PRUNING_ARGS="${RETH_PRUNING_ARGS:-}"
-
 # Export all variables for use in child processes
 echo ""
 echo "=========================================="
