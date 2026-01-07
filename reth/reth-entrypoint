@@ -40,6 +40,7 @@ echo "$OP_NODE_L2_ENGINE_AUTH_RAW" > "$OP_NODE_L2_ENGINE_AUTH"
 exec "$BINARY" node \
   -vvv \
   --full \
+  --config="$RETH_DIR/config.toml" \
   --datadir="$RETH_DATA_DIR" \
   --log.file.directory="$RETH_LOG_DIR" \
   --log.file.name="reth.log" \
