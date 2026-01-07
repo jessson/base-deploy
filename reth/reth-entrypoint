@@ -5,6 +5,7 @@ RETH_DIR=/home/luffy/nodes/base
 IPC_PATH=$RETH_DIR/data/reth.ipc
 RETH_DATA_DIR=$RETH_DIR/data
 RETH_LOG_DIR=$RETH_DIR/logs
+RETH_CONFIG_FILE=$RETH_DIR/config.toml
 BINARY=$RETH_DIR/base-reth-node
 RPC_PORT="${RPC_PORT:-8645}"
 WS_PORT="${WS_PORT:-8646}"
@@ -40,7 +41,7 @@ echo "$OP_NODE_L2_ENGINE_AUTH_RAW" > "$OP_NODE_L2_ENGINE_AUTH"
 exec "$BINARY" node \
   -vvv \
   --full \
-  --config="$RETH_DIR/config.toml" \
+  --config="$RETH_CONFIG_FILE" \
   --datadir="$RETH_DATA_DIR" \
   --log.file.directory="$RETH_LOG_DIR" \
   --log.file.name="reth.log" \

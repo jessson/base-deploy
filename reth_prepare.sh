@@ -218,6 +218,7 @@ RETH_DIR=/home/luffy/nodes/base
 export RETH_DATA_DIR="${RETH_DATA_DIR:-$RETH_DIR/data}"
 export IPC_PATH="${IPC_PATH:-$RETH_DIR/data/reth.ipc}"
 export RETH_LOG_FILE="${RETH_LOG_FILE:-$RETH_DIR/logs/reth.log}"
+export RETH_CONFIG_FILE="${RETH_CONFIG_FILE:-$RETH_DIR/config.toml}"
 
 # Binary paths (pointing to target directory)
 export BINARY="$TARGET_DIR/base-reth-node"
